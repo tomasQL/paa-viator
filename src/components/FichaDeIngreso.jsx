@@ -1,175 +1,261 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
-//  Librería de Íconos únicamente, queda pendiente usar assets propios
-import { Sun, Moon, Paperclip } from 'lucide-react';
+import { Sun, Moon, Paperclip, Clipboard, Stethoscope, FileText, User, Calendar } from 'lucide-react';
 
-
-const FichaDeIngreso = () => {
-
-    //  Modo oscuro desactivado por defecto
-    const [darkMode, setDarkMode] = useState(false);
+const FichaDeIngreso = ({ darkMode, setDarkMode }) => {
     const [files, setFiles] = useState([]);
 
-    //  Handler que se encarga del cambio de estado cuando se elige un archivo
     const handleFileChange = (event) => {
-        setFiles([...files, ...event.target.files])
+        setFiles([...files, ...event.target.files]);
     };
 
-    //  Handler que remueve uno de los archivos seleccionados y retorna la misma
-    //  lista de elementos eliminando el clickedo
     const removeFile = (index) => {
         setFiles(files.filter((_, i) => i !== index));
     };
 
-    //  Handler que switchea el estado de modo oscuro y claro 
-    //  (niega el boolean de darkmode de false a true)
     const toggleDarkMode = () => setDarkMode(!darkMode);
 
+    const SectionHeader = ({ icon, title }) => (
+        <div className="flex items-center space-x-2 mb-4 bg-orange-100 dark:bg-gray-800 p-2 rounded-t-lg">
+            {icon}
+            <h2 className="text-xl font-semibold">{title}</h2>
+        </div>
+    );
+
     return (
-        <>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
-            </style>
-            <div className={`min-h-screen font-['Source_Code_Pro'] ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
-                <div className="container mx-auto p-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-3xl font-bold">Ficha Médica Veterinaria - Fauna Silvestre</h1>
-                        <button
-                            onClick={toggleDarkMode}
-                            className={`p-2 rounded-full shadow-lg transition-transform transform ${darkMode ? 'bg-orange-500 text-gray-900' : 'bg-green-500 text-white'}`}
-                        >
-                            {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-                        </button>
+        <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
+            <div className="container mx-auto p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-3xl font-bold">Ficha de Ingreso</h1>
+                </div>
+
+                <form className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-orange-500">
+                    <SectionHeader icon={<Clipboard className="text-orange-500" />} title="Reseña" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            'Nombre común', 'Especie', 'Edad', 'Sexo',
+                            'Peso', 'Marcas ID (chip)', 'Procedencia', 'Fecha de ingreso'
+                        ].map((label) => (
+                            <div key={label}>
+                                <label className="block text-sm font-medium mb-1">{label}</label>
+                                <input
+                                    type="text"
+                                    className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                                />
+                            </div>
+                        ))}
                     </div>
 
-                    <form className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Campos de texto */}
-                            {[
-                                'Nombre del paciente', 'Especie', 'Edad estimada', 'Sexo',
-                                'Peso', 'Longitud', 'Procedencia', 'Fecha de ingreso',
-                                'Motivo de consulta', 'Signos clínicos', 'Temperatura',
-                            ].map((label) => (
-                                <div key={label}>
-                                    <label className="block text-sm font-medium mb-1">{label}</label>
-                                    <input
-                                        type="text"
-                                        className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} shadow-md focus:shadow-lg transition-shadow duration-200 ease-in-out`}
-                                    />
-                                </div>
-                            ))}
-                            {/* Checkboxes */}
-                            {[
-                                { label: 'Vacunas al día', options: ['Sí', 'No', 'Desconocido'] },
-                                { label: 'Desparasitación', options: ['Al día', 'Pendiente', 'No aplica'] },
-                                { label: 'Estado reproductivo', options: ['Castrado', 'Entero', 'Gestante', 'Lactante'] },
-                                { label: 'Comportamiento', options: ['Dócil', 'Agresivo', 'Asustado', 'Letárgico'] }
-                            ].map((field) => (
-                                <div key={field.label}>
-                                    <label className="block text-sm font-medium mb-1">{field.label}</label>
-                                    <div className="space-y-2">
-                                        {field.options.map((option) => (
-                                            <label key={option} className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox text-green-500 rounded-full shadow-sm focus:ring-0 transition-transform transform hover:scale-105"
-                                                />
-                                                <span className="ml-2">{option}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                            {/* Campos de texto */}
-                            {[
-                                'Frecuencia cardíaca', 'Frecuencia respiratoria', 'Estado de hidratación',
-                                'Condición corporal', 'Examen físico general', 'Diagnóstico presuntivo',
-                                'Pruebas diagnósticas', 'Tratamiento', 'Pronóstico', 'Observaciones',
-                                'Veterinario responsable'
-                            ].map((label) => (
-                                <div key={label}>
-                                    <label className="block text-sm font-medium mb-1">{label}</label>
-                                    <input
-                                        type="text"
-                                        className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} shadow-md focus:shadow-lg transition-shadow duration-200 ease-in-out`}
-                                    />
-                                </div>
-                            ))}
+                    <SectionHeader icon={<User className="text-orange-500" />} title="Anamnesis" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            'Donante', 'Fono', 'Dirección', 'Obtención del animal',
+                            'Alimentación', 'Tratamientos', 'N° Acta'
+                        ].map((label) => (
+                            <div key={label}>
+                                <label className="block text-sm font-medium mb-1">{label}</label>
+                                <input
+                                    type="text"
+                                    className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                                />
+                            </div>
+                        ))}
+                    </div>
 
-                            {/* Listas de selección */}
-                            {[
-                                { label: 'Tipo de hábitat', options: ['Bosque', 'Pradera', 'Montaña', 'Costa', 'Humedal', 'Desierto', 'Urbano'] },
-                                { label: 'Categoría de conservación', options: ['En peligro crítico', 'En peligro', 'Vulnerable', 'Casi amenazada', 'Preocupación menor', 'Datos insuficientes'] },
-                                { label: 'Dieta principal', options: ['Carnívoro', 'Herbívoro', 'Omnívoro', 'Insectívoro', 'Frugívoro', 'Nectarívoro'] },
-                                { label: 'Estado de alerta', options: ['Alerta', 'Responde a estímulos', 'Letárgico', 'Inconsciente'] },
-                                { label: 'Nivel de dolor', options: ['Sin dolor aparente', 'Dolor leve', 'Dolor moderado', 'Dolor severo'] },
-                                { label: 'Plan de manejo', options: ['Tratamiento ambulatorio', 'Hospitalización', 'Cirugía', 'Eutanasia', 'Rehabilitación', 'Liberación'] }
-                            ].map((field) => (
-                                <div key={field.label}>
-                                    <label className="block text-sm font-medium mb-1">{field.label}</label>
-                                    <select
-                                        className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} shadow-md focus:shadow-lg transition-shadow duration-200 ease-in-out`}
-                                    >
-                                        <option value="">Seleccionar</option>
-                                        {field.options.map((option) => (
-                                            <option key={option} value={option}>{option}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            ))}
-                        </div>
-
-
-
-
-                        <div className="col-span-full">
-                            <label className="block text-sm font-medium mb-1">Adjuntar archivos</label>
-                            <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg ${darkMode ? 'border-gray-700' : 'border-gray-300'} shadow-inner`}>
-                                <div className="space-y-1 text-center">
-                                    <Paperclip className="mx-auto h-12 w-12 text-gray-400" />
-                                    <div className="flex text-sm">
-                                        <label htmlFor="file-upload" className={`relative cursor-pointer rounded-md font-medium ${darkMode ? 'text-orange-400' : 'text-green-600'}`}>
-                                            <span>Subir archivos</span>
-                                            <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple onChange={handleFileChange} />
+                    <SectionHeader icon={<Stethoscope className="text-orange-500" />} title="Examen clínico" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            { label: 'Apariencia', options: ['Saludable', 'Descuidado', 'Sucio'] },
+                            { label: 'Comportamiento', options: ['Depresivo', 'Tranquilo', 'Alerta', 'Agresivo'] },
+                            { label: 'Expresión facial', options: ['Relajado', 'Miedo', 'Dolor'] },
+                            { label: 'Marcha/vuelo', options: ['Sin alteración', 'Claudicación', 'Fractura'] }
+                        ].map((field) => (
+                            <div key={field.label}>
+                                <label className="block text-sm font-medium mb-1">{field.label}</label>
+                                <div className="space-y-1">
+                                    {field.options.map((option) => (
+                                        <label key={option} className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                className="form-checkbox text-orange-500"
+                                            />
+                                            <span className="ml-2 text-sm">{option}</span>
                                         </label>
-                                        <p className="pl-1">o arrastrar y soltar</p>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <h3 className="font-medium mb-2">Frecuencias y ctes.</h3>
+                            <div className="space-y-2">
+                                {['FR', 'FC', 'T°'].map((label) => (
+                                    <div key={label} className="flex items-center">
+                                        <span className="w-8">{label}</span>
+                                        <input type="text" className={`w-full p-1 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`} />
                                     </div>
-                                    <p className="text-xs">PNG, JPG, PDF hasta 10MB</p>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="font-medium mb-2">Plumaje</h3>
+                            <div className="space-y-1">
+                                {['Pigmentación', 'Suavidad', 'Largo', 'Brillo', 'Adherencia', 'Integridad'].map((option) => (
+                                    <label key={option} className="flex items-center">
+                                        <input type="checkbox" className="form-checkbox text-orange-500" />
+                                        <span className="ml-2 text-sm">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="font-medium mb-2">Piel</h3>
+                            <div className="space-y-1">
+                                {['Pigmentación', 'Olor sui generis', 'Temperatura', 'Elasticidad', 'Secreciones'].map((option) => (
+                                    <label key={option} className="flex items-center">
+                                        <input type="checkbox" className="form-checkbox text-orange-500" />
+                                        <span className="ml-2 text-sm">{option}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <SectionHeader icon={<FileText className="text-orange-500" />} title="Conclusiones" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 className="font-medium mb-2">Sistema(s) afectado(s):</h3>
+                            <div className="space-y-1">
+                                {['Visual', 'Auditivo', 'Digestivo', 'Respiratorio', 'Locomotor', 'Tegumentario', 'Nervioso'].map((system) => (
+                                    <label key={system} className="flex items-center">
+                                        <input type="checkbox" className="form-checkbox text-orange-500" />
+                                        <span className="ml-2 text-sm">{system}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-4">
+                                <h3 className="font-medium mb-2">Curso:</h3>
+                                <div className="space-x-4">
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="curso" className="form-radio text-orange-500" />
+                                        <span className="ml-2">Agudo</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="curso" className="form-radio text-orange-500" />
+                                        <span className="ml-2">Crónico</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="font-medium mb-2">Estado gral afectado:</h3>
+                                <div className="space-x-4">
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="estado" className="form-radio text-orange-500" />
+                                        <span className="ml-2">SI</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="estado" className="form-radio text-orange-500" />
+                                        <span className="ml-2">NO</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Lista de archivos adjuntos */}
-                        {files.length > 0 && (
-                            <div className="col-span-full">
-                                <h3 className="text-sm font-medium mb-2">Archivos adjuntos:</h3>
-                                <ul className="divide-y divide-gray-200">
-                                    {files.map((file, index) => (
-                                        <li key={index} className="py-3 flex justify-between items-center">
-                                            <span className="text-sm">{file.name}</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => removeFile(index)}
-                                                className={`ml-2 text-sm font-medium ${darkMode ? 'text-orange-400' : 'text-green-600'} transition-transform transform hover:scale-105`}
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Diagnóstico:</label>
+                        <textarea
+                            className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Plan de Tratamiento:</label>
+                        <textarea
+                            className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Voluntario:</label>
+                            <input
+                                type="text"
+                                className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Médico Veterinario:</label>
+                            <input
+                                type="text"
+                                className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                            />
+                        </div>
+                    </div>
+
+                    <SectionHeader icon={<Calendar className="text-orange-500" />} title="Fecha egreso" />
+                    <div className="flex space-x-4">
+                        {['Liberación', 'Derivación', 'Muerte', 'Eutanasia'].map((option) => (
+                            <label key={option} className="inline-flex items-center">
+                                <input type="checkbox" className="form-checkbox text-orange-500" />
+                                <span className="ml-2">{option}</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    {/* Adjuntar Archivos */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Adjuntar archivos</label>
+                        <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>
+                            <div className="space-y-1 text-center">
+                                <Paperclip className="mx-auto h-12 w-12 text-gray-400" />
+                                <div className="flex text-sm">
+                                    <label htmlFor="file-upload" className={`relative cursor-pointer rounded-md font-medium ${darkMode ? 'text-orange-400' : 'text-green-600'}`}>
+                                        <span>Subir archivos</span>
+                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple onChange={handleFileChange} />
+                                    </label>
+                                    <p className="pl-1">o arrastrar y soltar</p>
+                                </div>
+                                <p className="text-xs">PNG, JPG, PDF hasta 10MB</p>
                             </div>
-                        )}
+                        </div>
+                    </div>
 
-                        <button
-                            type="submit"
-                            className={`w-full p-3 rounded-lg font-medium shadow-md transition-shadow transform hover:shadow-lg ${darkMode ? 'bg-orange-500 text-gray-900' : 'bg-green-600 text-white'}`}
-                        >
-                            Guardar Ficha Médica
-                        </button>
-                    </form>
-                </div >
-            </div >
-        </>
+                    {/* Lista de archivos adjuntos */}
+                    {files.length > 0 && (
+                        <div>
+                            <h3 className="text-sm font-medium mb-2">Archivos adjuntos:</h3>
+                            <ul className="divide-y divide-gray-200">
+                                {files.map((file, index) => (
+                                    <li key={index} className="py-3 flex justify-between items-center">
+                                        <span className="text-sm">{file.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeFile(index)}
+                                            className={`ml-2 text-sm font-medium ${darkMode ? 'text-orange-400' : 'text-green-600'}`}
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        className={`w-full p-3 rounded-lg font-medium shadow-md transition-shadow ${darkMode ? 'bg-orange-500 text-gray-900' : 'bg-green-600 text-white'}`}
+                    >
+                        Guardar Ficha de Ingreso
+                    </button>
+                </form>
+            </div>
+        </div>
     );
 };
 
