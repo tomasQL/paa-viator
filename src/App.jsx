@@ -52,11 +52,11 @@
 
 
 import React, { useState } from 'react';
-import Sidebar from './components/pages/Sidebar';
-import Inicio from './components/Inicio';
-import FichaMedica from './components/FichaMedica';
-import FichaDeIngreso from './components/FichaDeIngreso.jsx';
-import Archivo from './components/Archivo';
+import Sidebar from './components/Sidebar';
+import Inicio from './components/pages/Inicio.jsx';
+import FichaMedica from './components/pages/FichaMedica.jsx';
+import FichaDeIngreso from './components/pages/FichaDeIngreso.jsx';
+import Archivo from './components/pages/Archivo.jsx';
 // Importa otros componentes necesarios
 
 const App = () => {
